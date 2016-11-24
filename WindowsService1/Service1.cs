@@ -135,8 +135,8 @@ namespace ServiceCtrlPc
                 }
 
                 MyTrace.WriteLog("START : Contrôle du flag arr.flg", 2, codeappli);
-                LectureFlagArr MyRoutine1 = new LectureFlagArr();
-                MyRoutine1.LectureFlag(path + @"FLAG\");
+                LectureFlag MyLectureFlag = new LectureFlag();
+                MyLectureFlag.LectureFlagArr(path + @"FLAG\");
             }
             
             catch (Exception err)
@@ -219,85 +219,141 @@ namespace ServiceCtrlPc
         }
         public void Routine2(object sender, System.Timers.ElapsedEventArgs args)
         {
-
-            //contrôle du flag arr.flg
             MyTrace.WriteLog("Début routine 2", 2, codeappli);
-            SynchroHeure MySynchroHeure = new SynchroHeure();
-
-
+            //Maj de la date de dernière connexion
             try
             {
                 ReferenceWSCtrlPc.WSCtrlPc ws = new ReferenceWSCtrlPc.WSCtrlPc();
                 Object Guid = null;
                 Guid = Registry.GetValue(@"HKEY_USERS\.DEFAULT\Software\CtrlPc\Version", "GUID", null);
-                MyTrace.WriteLog("RT2 : Controle présence demande d'arrêt via WS", 2, codeappli);
-                MyTrace.WriteLog("RT2 : Appel du WS --> GetArret(" + Guid.ToString()+")", 2, codeappli);
-                string flagArr = ws.GetArret(Guid.ToString());
-                if (flagArr.Contains("1")||flagArr.Contains("True"))
-                {
-                    MyTrace.WriteLog("RT2 : Demande d'arrêt de la station", 2, codeappli);
-                    Shutdown MyShutdown = new Shutdown();
-                }
+                MyTrace.WriteLog("RT2 : MAJ de la date de dernière connexion", 2, codeappli);
+                ws.SetDateDerniereConnexion(Guid.ToString());
             }
             catch (Exception err)
             {
-                MyTrace.WriteLog("RT2 : Erreur lors du controle d'arret --> " + err.Message, 1, codeappli);
-                MyTrace.WriteLog("RT2 : Lecture du fichier arr.flg ", 2, codeappli);
-                LectureFlagArr MyRoutine1 = new LectureFlagArr();
-                try
-                {
-                    MyRoutine1.LectureFlag(@"C:\ProgramData\CtrlPc\FLAG\");
-                }
-                catch (Exception err2)
-                {
-                    MyTrace.WriteLog("RT2 : Erreur lors de la lecture du flag arr.flg --> " + err2.Message, 1, codeappli);
-                }
-                
-
+                MyTrace.WriteLog("RT2 : Erreur lors de l'ajout de la date de dernière connexion "+err.Message, 1, codeappli);
+                throw;
             }
-            //controle planning
-            MyTrace.WriteLog("RT2 : Vérification du planning", 2, codeappli);
+
+            //Controle de l'exception
+            int exception=0;
             try
             {
                 ReferenceWSCtrlPc.WSCtrlPc ws = new ReferenceWSCtrlPc.WSCtrlPc();
                 Object Guid = null;
                 Guid = Registry.GetValue(@"HKEY_USERS\.DEFAULT\Software\CtrlPc\Version", "GUID", null);
-                DateTime dateTraitement = DateTime.Now;
-                try
+                MyTrace.WriteLog("RT2 : Controle de demande d'exception", 2, codeappli);
+
+                string result = ws.GetException(Guid.ToString());
+                if (result.Contains("true")||result.Contains("1"))
                 {
-                    dateTraitement = MySynchroHeure.GetNetworkTime();
-                }
-                catch (Exception err)
-                {
-                    MyTrace.WriteLog("RT2 : Récupération heure serveur KO --> " + err.Message, 1, codeappli);
-                    dateTraitement = DateTime.Now;
-                }
-                MyTrace.WriteLog("RT2 : Appel du WS --> GetPlageHoraire(" + Guid.ToString()+","+ dateTraitement+")", 2, codeappli);
-                string stop = ws.GetPlageHoraire(Guid.ToString(), dateTraitement);
-                if (stop.Contains("0")||stop.Contains("False"))
-                {
-                    MyTrace.WriteLog("RT2 : Demande d'arrêt envoyé par WS --> " + stop, 2, codeappli);
-                    Shutdown MyShutdown = new Shutdown();
+                    exception = 1;
+                    MyTrace.WriteLog("RT2 : exception => "+result, 2, codeappli);
+                    MyTrace.WriteLog("RT2 : Pas de contrôle d'arrêt", 2, codeappli);
                 }
                 else
                 {
-                    MyTrace.WriteLog("RT2 : Pas de demande d'arrêt de la part du WS", 2, codeappli);
+                    exception = 0;
+                    MyTrace.WriteLog("RT2 : exception => " + result, 2, codeappli);
+                    MyTrace.WriteLog("RT2 : Pas d'exception donc contrôle des planning", 2, codeappli);
                 }
             }
             catch (Exception err)
             {
-                MyTrace.WriteLog("RT2 : Erreur lors de la vérification du planning via WS--> " + err.Message, 1, codeappli);
-                //vérification dans fichier
+                MyTrace.WriteLog("RT2 : Erreur lors de la récupération de l'exception => " +err.Message, 1, codeappli);
+                MyTrace.WriteLog("RT2 : Lecture du fichier nfo.flg ", 2, codeappli);
+                LectureFlag MyLectureFlag = new LectureFlag();
                 try
                 {
-                    MyTrace.WriteLog("RT2 : Contrôle du planning via fichier planning", 2, codeappli);
-                    ControleHoraireLocal MyControleHoraireLocal = new ControleHoraireLocal();
+                    exception=MyLectureFlag.LectureFlagNfo(@"C:\ProgramData\CtrlPc\FLAG\");
                 }
                 catch (Exception err2)
                 {
-                    MyTrace.WriteLog("RT2 : Erreur lors du contrôle en local du planning --> " + err2.Message, 1, codeappli);
+                    MyTrace.WriteLog("RT2 : Erreur lors de la lecture du flag nfo.flg --> " + err2.Message, 1, codeappli);
                 }
+            }
+            if (exception == 0)
+            {
 
+                //contrôle du flag arr.flg
+               
+                SynchroHeure MySynchroHeure = new SynchroHeure();
+
+
+                try
+                {
+                    ReferenceWSCtrlPc.WSCtrlPc ws = new ReferenceWSCtrlPc.WSCtrlPc();
+                    Object Guid = null;
+                    Guid = Registry.GetValue(@"HKEY_USERS\.DEFAULT\Software\CtrlPc\Version", "GUID", null);
+                    MyTrace.WriteLog("RT2 : Controle présence demande d'arrêt via WS", 2, codeappli);
+                    MyTrace.WriteLog("RT2 : Appel du WS --> GetArret(" + Guid.ToString() + ")", 2, codeappli);
+                    string flagArr = ws.GetArret(Guid.ToString());
+                    if (flagArr.Contains("1") || flagArr.Contains("True"))
+                    {
+                        MyTrace.WriteLog("RT2 : Demande d'arrêt de la station", 2, codeappli);
+                        Shutdown MyShutdown = new Shutdown();
+                    }
+                }
+                catch (Exception err)
+                {
+                    MyTrace.WriteLog("RT2 : Erreur lors du controle d'arret --> " + err.Message, 1, codeappli);
+                    MyTrace.WriteLog("RT2 : Lecture du fichier arr.flg ", 2, codeappli);
+                    LectureFlag MyLectureFlag = new LectureFlag();
+                    try
+                    {
+                        MyLectureFlag.LectureFlagArr(@"C:\ProgramData\CtrlPc\FLAG\");
+                    }
+                    catch (Exception err2)
+                    {
+                        MyTrace.WriteLog("RT2 : Erreur lors de la lecture du flag arr.flg --> " + err2.Message, 1, codeappli);
+                    }
+
+
+                }
+                //controle planning
+                MyTrace.WriteLog("RT2 : Vérification du planning", 2, codeappli);
+                try
+                {
+                    ReferenceWSCtrlPc.WSCtrlPc ws = new ReferenceWSCtrlPc.WSCtrlPc();
+                    Object Guid = null;
+                    Guid = Registry.GetValue(@"HKEY_USERS\.DEFAULT\Software\CtrlPc\Version", "GUID", null);
+                    DateTime dateTraitement = DateTime.Now;
+                    try
+                    {
+                        dateTraitement = MySynchroHeure.GetNetworkTime();
+                    }
+                    catch (Exception err)
+                    {
+                        MyTrace.WriteLog("RT2 : Récupération heure serveur KO --> " + err.Message, 1, codeappli);
+                        dateTraitement = DateTime.Now;
+                    }
+                    MyTrace.WriteLog("RT2 : Appel du WS --> GetPlageHoraire(" + Guid.ToString() + "," + dateTraitement + ")", 2, codeappli);
+                    string stop = ws.GetPlageHoraire(Guid.ToString(), dateTraitement);
+                    if (stop.Contains("0") || stop.Contains("False"))
+                    {
+                        MyTrace.WriteLog("RT2 : Demande d'arrêt envoyé par WS --> " + stop, 2, codeappli);
+                        Shutdown MyShutdown = new Shutdown();
+                    }
+                    else
+                    {
+                        MyTrace.WriteLog("RT2 : Pas de demande d'arrêt de la part du WS", 2, codeappli);
+                    }
+                }
+                catch (Exception err)
+                {
+                    MyTrace.WriteLog("RT2 : Erreur lors de la vérification du planning via WS--> " + err.Message, 1, codeappli);
+                    //vérification dans fichier
+                    try
+                    {
+                        MyTrace.WriteLog("RT2 : Contrôle du planning via fichier planning", 2, codeappli);
+                        ControleHoraireLocal MyControleHoraireLocal = new ControleHoraireLocal();
+                    }
+                    catch (Exception err2)
+                    {
+                        MyTrace.WriteLog("RT2 : Erreur lors du contrôle en local du planning --> " + err2.Message, 1, codeappli);
+                    }
+
+                }
             }
             MyTrace.WriteLog("Fin routine 2", 2, codeappli);
 

@@ -71,7 +71,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="LectureFlagArr.cs" />
+    <Compile Include="LectureFlag.cs" />
     <Compile Include="Service1.cs">
       <SubType>Component</SubType>
     </Compile>

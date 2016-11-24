@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace ServiceCtrlPc
 {
-    public class LectureFlagArr
+    public class LectureFlag
     {
         Trace MyTrace = new Trace();
         private string codeappli = "SERVICES";
-        public void LectureFlag(string path)
+        public void LectureFlagArr(string path)
         {
 
             if (File.Exists(path + "arr.flg"))
@@ -31,6 +31,30 @@ namespace ServiceCtrlPc
             else
             {
                 MyTrace.WriteLog("Le fichier arr.flg n'est pas présent", 2, codeappli);
+            }
+
+        }
+
+        public int LectureFlagNfo(string path)
+        {
+
+            if (File.Exists(path + "nfo.flg"))
+            {
+                string LectureFlg = File.ReadAllText(path + @"nfo.flg");
+                if (LectureFlg.Contains("True")||LectureFlg.Contains("1"))
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+
+            }
+            else
+            {
+                MyTrace.WriteLog("Le fichier arr.flg n'est pas présent", 2, codeappli);
+                return 0;
             }
 
         }

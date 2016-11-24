@@ -49,6 +49,10 @@ namespace ServiceCtrlPc.ReferenceWSCtrlPc {
         
         private System.Threading.SendOrPostCallback SetExecProgramOperationCompleted;
         
+        private System.Threading.SendOrPostCallback GetExceptionOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback SetDateDerniereConnexionOperationCompleted;
+        
         private bool useDefaultCredentialsSetExplicitly;
         
         /// <remarks/>
@@ -116,6 +120,12 @@ namespace ServiceCtrlPc.ReferenceWSCtrlPc {
         
         /// <remarks/>
         public event SetExecProgramCompletedEventHandler SetExecProgramCompleted;
+        
+        /// <remarks/>
+        public event GetExceptionCompletedEventHandler GetExceptionCompleted;
+        
+        /// <remarks/>
+        public event SetDateDerniereConnexionCompletedEventHandler SetDateDerniereConnexionCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/HelloWorld", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -430,6 +440,63 @@ namespace ServiceCtrlPc.ReferenceWSCtrlPc {
         }
         
         /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetException", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public string GetException(string guid) {
+            object[] results = this.Invoke("GetException", new object[] {
+                        guid});
+            return ((string)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void GetExceptionAsync(string guid) {
+            this.GetExceptionAsync(guid, null);
+        }
+        
+        /// <remarks/>
+        public void GetExceptionAsync(string guid, object userState) {
+            if ((this.GetExceptionOperationCompleted == null)) {
+                this.GetExceptionOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetExceptionOperationCompleted);
+            }
+            this.InvokeAsync("GetException", new object[] {
+                        guid}, this.GetExceptionOperationCompleted, userState);
+        }
+        
+        private void OnGetExceptionOperationCompleted(object arg) {
+            if ((this.GetExceptionCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetExceptionCompleted(this, new GetExceptionCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/SetDateDerniereConnexion", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SetDateDerniereConnexion(string guid) {
+            this.Invoke("SetDateDerniereConnexion", new object[] {
+                        guid});
+        }
+        
+        /// <remarks/>
+        public void SetDateDerniereConnexionAsync(string guid) {
+            this.SetDateDerniereConnexionAsync(guid, null);
+        }
+        
+        /// <remarks/>
+        public void SetDateDerniereConnexionAsync(string guid, object userState) {
+            if ((this.SetDateDerniereConnexionOperationCompleted == null)) {
+                this.SetDateDerniereConnexionOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSetDateDerniereConnexionOperationCompleted);
+            }
+            this.InvokeAsync("SetDateDerniereConnexion", new object[] {
+                        guid}, this.SetDateDerniereConnexionOperationCompleted, userState);
+        }
+        
+        private void OnSetDateDerniereConnexionOperationCompleted(object arg) {
+            if ((this.SetDateDerniereConnexionCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SetDateDerniereConnexionCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
         public new void CancelAsync(object userState) {
             base.CancelAsync(userState);
         }
@@ -619,6 +686,36 @@ namespace ServiceCtrlPc.ReferenceWSCtrlPc {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
     public delegate void SetExecProgramCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
+    public delegate void GetExceptionCompletedEventHandler(object sender, GetExceptionCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetExceptionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal GetExceptionCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public string Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
+    public delegate void SetDateDerniereConnexionCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
 }
 
 #pragma warning restore 1591

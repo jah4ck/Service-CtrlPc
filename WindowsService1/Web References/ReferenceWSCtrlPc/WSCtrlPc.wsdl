@@ -136,6 +136,30 @@
       <s:element name="SetExecProgramResponse">
         <s:complexType />
       </s:element>
+      <s:element name="GetException">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="guid" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetExceptionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetExceptionResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetDateDerniereConnexion">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="guid" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetDateDerniereConnexionResponse">
+        <s:complexType />
+      </s:element>
     </s:schema>
   </wsdl:types>
   <wsdl:message name="HelloWorldSoapIn">
@@ -198,6 +222,18 @@
   <wsdl:message name="SetExecProgramSoapOut">
     <wsdl:part name="parameters" element="tns:SetExecProgramResponse" />
   </wsdl:message>
+  <wsdl:message name="GetExceptionSoapIn">
+    <wsdl:part name="parameters" element="tns:GetException" />
+  </wsdl:message>
+  <wsdl:message name="GetExceptionSoapOut">
+    <wsdl:part name="parameters" element="tns:GetExceptionResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetDateDerniereConnexionSoapIn">
+    <wsdl:part name="parameters" element="tns:SetDateDerniereConnexion" />
+  </wsdl:message>
+  <wsdl:message name="SetDateDerniereConnexionSoapOut">
+    <wsdl:part name="parameters" element="tns:SetDateDerniereConnexionResponse" />
+  </wsdl:message>
   <wsdl:portType name="WSCtrlPcSoap">
     <wsdl:operation name="HelloWorld">
       <wsdl:input message="tns:HelloWorldSoapIn" />
@@ -238,6 +274,14 @@
     <wsdl:operation name="SetExecProgram">
       <wsdl:input message="tns:SetExecProgramSoapIn" />
       <wsdl:output message="tns:SetExecProgramSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetException">
+      <wsdl:input message="tns:GetExceptionSoapIn" />
+      <wsdl:output message="tns:GetExceptionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetDateDerniereConnexion">
+      <wsdl:input message="tns:SetDateDerniereConnexionSoapIn" />
+      <wsdl:output message="tns:SetDateDerniereConnexionSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="WSCtrlPcSoap" type="tns:WSCtrlPcSoap">
@@ -332,6 +376,24 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetException">
+      <soap:operation soapAction="http://tempuri.org/GetException" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetDateDerniereConnexion">
+      <soap:operation soapAction="http://tempuri.org/SetDateDerniereConnexion" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="WSCtrlPcSoap12" type="tns:WSCtrlPcSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
@@ -418,6 +480,24 @@
     </wsdl:operation>
     <wsdl:operation name="SetExecProgram">
       <soap12:operation soapAction="http://tempuri.org/SetExecProgram" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetException">
+      <soap12:operation soapAction="http://tempuri.org/GetException" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetDateDerniereConnexion">
+      <soap12:operation soapAction="http://tempuri.org/SetDateDerniereConnexion" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
