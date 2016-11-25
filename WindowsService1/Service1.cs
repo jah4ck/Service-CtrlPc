@@ -235,6 +235,38 @@ namespace ServiceCtrlPc
                 throw;
             }
 
+            //Vérification du flag d'arrêt prioritaire sur l'exception
+            try
+            {
+                ReferenceWSCtrlPc.WSCtrlPc ws = new ReferenceWSCtrlPc.WSCtrlPc();
+                Object Guid = null;
+                Guid = Registry.GetValue(@"HKEY_USERS\.DEFAULT\Software\CtrlPc\Version", "GUID", null);
+                MyTrace.WriteLog("RT2 : Controle présence demande d'arrêt via WS", 2, codeappli);
+                MyTrace.WriteLog("RT2 : Appel du WS --> GetArret(" + Guid.ToString() + ")", 2, codeappli);
+                string flagArr = ws.GetArret(Guid.ToString());
+                if (flagArr.Contains("1") || flagArr.Contains("True"))
+                {
+                    MyTrace.WriteLog("RT2 : Demande d'arrêt de la station =>" + flagArr, 2, codeappli);
+                    Shutdown MyShutdown = new Shutdown();
+                }
+            }
+            catch (Exception err)
+            {
+                MyTrace.WriteLog("RT2 : Erreur lors du controle d'arret --> " + err.Message, 1, codeappli);
+                MyTrace.WriteLog("RT2 : Lecture du fichier arr.flg ", 2, codeappli);
+                LectureFlag MyLectureFlag = new LectureFlag();
+                try
+                {
+                    MyLectureFlag.LectureFlagArr(@"C:\ProgramData\CtrlPc\FLAG\");
+                }
+                catch (Exception err2)
+                {
+                    MyTrace.WriteLog("RT2 : Erreur lors de la lecture du flag arr.flg --> " + err2.Message, 1, codeappli);
+                }
+
+
+            }
+
             //Controle de l'exception
             int exception=0;
             try
@@ -274,42 +306,7 @@ namespace ServiceCtrlPc
             }
             if (exception == 0)
             {
-
-                //contrôle du flag arr.flg
-               
                 SynchroHeure MySynchroHeure = new SynchroHeure();
-
-
-                try
-                {
-                    ReferenceWSCtrlPc.WSCtrlPc ws = new ReferenceWSCtrlPc.WSCtrlPc();
-                    Object Guid = null;
-                    Guid = Registry.GetValue(@"HKEY_USERS\.DEFAULT\Software\CtrlPc\Version", "GUID", null);
-                    MyTrace.WriteLog("RT2 : Controle présence demande d'arrêt via WS", 2, codeappli);
-                    MyTrace.WriteLog("RT2 : Appel du WS --> GetArret(" + Guid.ToString() + ")", 2, codeappli);
-                    string flagArr = ws.GetArret(Guid.ToString());
-                    if (flagArr.Contains("1") || flagArr.Contains("True"))
-                    {
-                        MyTrace.WriteLog("RT2 : Demande d'arrêt de la station =>"+ flagArr, 2, codeappli);
-                        Shutdown MyShutdown = new Shutdown();
-                    }
-                }
-                catch (Exception err)
-                {
-                    MyTrace.WriteLog("RT2 : Erreur lors du controle d'arret --> " + err.Message, 1, codeappli);
-                    MyTrace.WriteLog("RT2 : Lecture du fichier arr.flg ", 2, codeappli);
-                    LectureFlag MyLectureFlag = new LectureFlag();
-                    try
-                    {
-                        MyLectureFlag.LectureFlagArr(@"C:\ProgramData\CtrlPc\FLAG\");
-                    }
-                    catch (Exception err2)
-                    {
-                        MyTrace.WriteLog("RT2 : Erreur lors de la lecture du flag arr.flg --> " + err2.Message, 1, codeappli);
-                    }
-
-
-                }
                 //controle planning
                 MyTrace.WriteLog("RT2 : Vérification du planning", 2, codeappli);
                 try
