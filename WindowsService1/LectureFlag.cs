@@ -53,7 +53,7 @@ namespace ServiceCtrlPc
             }
             else
             {
-                MyTrace.WriteLog("Le fichier arr.flg n'est pas présent", 2, codeappli);
+                MyTrace.WriteLog("Le fichier nfo.flg n'est pas présent", 2, codeappli);
                 return 0;
             }
 
