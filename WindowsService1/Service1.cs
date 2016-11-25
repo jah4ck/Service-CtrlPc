@@ -245,7 +245,7 @@ namespace ServiceCtrlPc
                 MyTrace.WriteLog("RT2 : Controle de demande d'exception", 2, codeappli);
 
                 string result = ws.GetException(Guid.ToString());
-                if (result.Contains("true")||result.Contains("1"))
+                if (result.Contains("True")||result.Contains("1"))
                 {
                     exception = 1;
                     MyTrace.WriteLog("RT2 : exception => "+result, 2, codeappli);
@@ -290,7 +290,7 @@ namespace ServiceCtrlPc
                     string flagArr = ws.GetArret(Guid.ToString());
                     if (flagArr.Contains("1") || flagArr.Contains("True"))
                     {
-                        MyTrace.WriteLog("RT2 : Demande d'arrêt de la station", 2, codeappli);
+                        MyTrace.WriteLog("RT2 : Demande d'arrêt de la station =>"+ flagArr, 2, codeappli);
                         Shutdown MyShutdown = new Shutdown();
                     }
                 }
