@@ -52,7 +52,7 @@ namespace ServiceCtrlPc
                 {
                     string NameDate = dateTraitement.ToString("yyyyMMdd");
                     string Date = dateTraitement.ToString("dd/MM/yyyy HH:mm:ss");
-                    using (StreamWriter writer = new StreamWriter(@"C:\ProgramData\CtrlPc\LOG\JOURNAL_" + NameDate + ".log"))
+                    using (StreamWriter writer = File.AppendText(@"C:\ProgramData\CtrlPc\LOG\JOURNAL_" + NameDate + ".log"))
                     {
                         if (arg1 == 1 && (type==3 || type==1))
                         {
@@ -89,7 +89,7 @@ namespace ServiceCtrlPc
                     {
                         string NameDate = dateTraitement.ToString("yyyyMMdd");
                         string Date = dateTraitement.ToString("dd/MM/yyyy HH:mm:ss");
-                        using (StreamWriter writer = new StreamWriter(@"C:\ProgramData\CtrlPc\LOG\RELICA_" + NameDate + ".log"))
+                        using (StreamWriter writer = File.AppendText(@"C:\ProgramData\CtrlPc\LOG\RELICA_" + NameDate + ".log"))
                         {
                             if (arg1 == 1 && (type == 3 || type == 1))
                             {
@@ -107,7 +107,7 @@ namespace ServiceCtrlPc
                 {
                     string NameDate = dateTraitement.ToString("yyyyMMdd");
                     string Date = dateTraitement.ToString("dd/MM/yyyy HH:mm:ss");
-                    using (StreamWriter writer = new StreamWriter(@"C:\ProgramData\CtrlPc\LOG\JOURNAL_ERREUR_" + NameDate + ".log"))
+                    using (StreamWriter writer = File.AppendText(@"C:\ProgramData\CtrlPc\LOG\JOURNAL_ERREUR_" + NameDate + ".log"))
                     {
                         writer.WriteLine(Date + "     " + arg2 + "     " + "ERREUR : " + err.Message);
                         if (arg1 == 1 && (type == 3 || type == 1))
@@ -132,7 +132,7 @@ namespace ServiceCtrlPc
                     string NameDate = dateTraitement.ToString("yyyyMMdd");
                     string Date = dateTraitement.ToString("dd/MM/yyyy HH:mm:ss");
 
-                    using (StreamWriter writer = new StreamWriter(@"C:\ProgramData\CtrlPc\LOG\RELICA_" + NameDate + ".log"))
+                    using (StreamWriter writer = File.AppendText(@"C:\ProgramData\CtrlPc\LOG\RELICA_" + NameDate + ".log"))
                     {
                         if (arg1 == 1 && (type == 3 || type == 1))
                         {
@@ -150,7 +150,7 @@ namespace ServiceCtrlPc
                 {
                     string NameDate = dateTraitement.ToString("yyyyMMdd");
                     string Date = dateTraitement.ToString("dd/MM/yyyy HH:mm:ss");
-                    using (StreamWriter writer = new StreamWriter(@"C:\ProgramData\CtrlPc\LOG\JOURNAL_ERREUR_" + NameDate + ".log"))
+                    using (StreamWriter writer = File.AppendText(@"C:\ProgramData\CtrlPc\LOG\JOURNAL_ERREUR_" + NameDate + ".log"))
                     {
                         writer.WriteLine(Date + "     " + arg2 + "     " + "ERREUR : " + err.Message);
                     }
