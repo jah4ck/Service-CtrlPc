@@ -25,7 +25,7 @@ namespace ServiceCtrlPc
                 }
                 catch (Exception err)
                 {
-                    MyTrace.WriteLog("Récupération heure serveur KO --> " + err.Message, 1, codeappli);
+                    MyTrace.WriteLog("Récupération heure serveur KO --> " + err.Message, 1, codeappli, status, type);
                     heureactuelle = DateTime.Now;
                 }
                 foreach (string lignedetail in ligne)
@@ -44,14 +44,14 @@ namespace ServiceCtrlPc
                 }
                 if (count == 0)
                 {
-                    MyTrace.WriteLog("La date n'est pas comprise parmis les plages locales", 2, codeappli);
-                    MyTrace.WriteLog("Appel de l'arrêt de l'ordinateur", 2, codeappli);
+                    MyTrace.WriteLog("La date n'est pas comprise parmis les plages locales", 2, codeappli, status, type);
+                    MyTrace.WriteLog("Appel de l'arrêt de l'ordinateur", 2, codeappli, status, type);
                     Shutdown MyShutdown = new Shutdown();
                 }
             }
             else
             {
-                MyTrace.WriteLog("Le planning n'est pas présent en locale", 2, codeappli);
+                MyTrace.WriteLog("Le planning n'est pas présent en locale", 2, codeappli, status, type);
             }
         }
     }
