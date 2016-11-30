@@ -178,6 +178,16 @@
       <s:element name="SetDateDerniereConnexionResponse">
         <s:complexType />
       </s:element>
+      <s:element name="SetIncrementeRelica">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="guid" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetIncrementeRelicaResponse">
+        <s:complexType />
+      </s:element>
     </s:schema>
   </wsdl:types>
   <wsdl:message name="HelloWorldSoapIn">
@@ -258,6 +268,12 @@
   <wsdl:message name="SetDateDerniereConnexionSoapOut">
     <wsdl:part name="parameters" element="tns:SetDateDerniereConnexionResponse" />
   </wsdl:message>
+  <wsdl:message name="SetIncrementeRelicaSoapIn">
+    <wsdl:part name="parameters" element="tns:SetIncrementeRelica" />
+  </wsdl:message>
+  <wsdl:message name="SetIncrementeRelicaSoapOut">
+    <wsdl:part name="parameters" element="tns:SetIncrementeRelicaResponse" />
+  </wsdl:message>
   <wsdl:portType name="WSCtrlPcSoap">
     <wsdl:operation name="HelloWorld">
       <wsdl:input message="tns:HelloWorldSoapIn" />
@@ -310,6 +326,10 @@
     <wsdl:operation name="SetDateDerniereConnexion">
       <wsdl:input message="tns:SetDateDerniereConnexionSoapIn" />
       <wsdl:output message="tns:SetDateDerniereConnexionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetIncrementeRelica">
+      <wsdl:input message="tns:SetIncrementeRelicaSoapIn" />
+      <wsdl:output message="tns:SetIncrementeRelicaSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="WSCtrlPcSoap" type="tns:WSCtrlPcSoap">
@@ -431,6 +451,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SetIncrementeRelica">
+      <soap:operation soapAction="http://tempuri.org/SetIncrementeRelica" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="WSCtrlPcSoap12" type="tns:WSCtrlPcSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
@@ -544,6 +573,15 @@
     </wsdl:operation>
     <wsdl:operation name="SetDateDerniereConnexion">
       <soap12:operation soapAction="http://tempuri.org/SetDateDerniereConnexion" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetIncrementeRelica">
+      <soap12:operation soapAction="http://tempuri.org/SetIncrementeRelica" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

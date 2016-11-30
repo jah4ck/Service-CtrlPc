@@ -55,6 +55,8 @@ namespace ServiceCtrlPc.ReferenceWSCtrlPc {
         
         private System.Threading.SendOrPostCallback SetDateDerniereConnexionOperationCompleted;
         
+        private System.Threading.SendOrPostCallback SetIncrementeRelicaOperationCompleted;
+        
         private bool useDefaultCredentialsSetExplicitly;
         
         /// <remarks/>
@@ -131,6 +133,9 @@ namespace ServiceCtrlPc.ReferenceWSCtrlPc {
         
         /// <remarks/>
         public event SetDateDerniereConnexionCompletedEventHandler SetDateDerniereConnexionCompleted;
+        
+        /// <remarks/>
+        public event SetIncrementeRelicaCompletedEventHandler SetIncrementeRelicaCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/HelloWorld", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -539,6 +544,34 @@ namespace ServiceCtrlPc.ReferenceWSCtrlPc {
         }
         
         /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/SetIncrementeRelica", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SetIncrementeRelica(string guid) {
+            this.Invoke("SetIncrementeRelica", new object[] {
+                        guid});
+        }
+        
+        /// <remarks/>
+        public void SetIncrementeRelicaAsync(string guid) {
+            this.SetIncrementeRelicaAsync(guid, null);
+        }
+        
+        /// <remarks/>
+        public void SetIncrementeRelicaAsync(string guid, object userState) {
+            if ((this.SetIncrementeRelicaOperationCompleted == null)) {
+                this.SetIncrementeRelicaOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSetIncrementeRelicaOperationCompleted);
+            }
+            this.InvokeAsync("SetIncrementeRelica", new object[] {
+                        guid}, this.SetIncrementeRelicaOperationCompleted, userState);
+        }
+        
+        private void OnSetIncrementeRelicaOperationCompleted(object arg) {
+            if ((this.SetIncrementeRelicaCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SetIncrementeRelicaCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
         public new void CancelAsync(object userState) {
             base.CancelAsync(userState);
         }
@@ -784,6 +817,10 @@ namespace ServiceCtrlPc.ReferenceWSCtrlPc {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
     public delegate void SetDateDerniereConnexionCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
+    public delegate void SetIncrementeRelicaCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
 }
 
 #pragma warning restore 1591
