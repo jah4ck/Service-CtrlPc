@@ -76,8 +76,16 @@ namespace ServiceCtrlPc
                 {
                     Object Guid = Registry.GetValue(@"HKEY_USERS\.DEFAULT\Software\CtrlPc\Version", "GUID", null);
                     ReferenceWSCtrlPc.WSCtrlPc ws = new ReferenceWSCtrlPc.WSCtrlPc();
-                    string result = ws.TraceLogNew(Guid.ToString(), dateTraitement, arg2, arg1, arg0);
-                    if (result == "RELICA")
+                    string result = "OK";
+                    if (arg1 == 1 && (type == 3 || type == 1))
+                    {
+                        result = ws.TraceLogNew(Guid.ToString(), dateTraitement, arg2, arg1, arg0);
+                    }
+                    if (arg1 == 2 && (type == 3 || type == 2))
+                    {
+                        result = ws.TraceLogNew(Guid.ToString(), dateTraitement, arg2, arg1, arg0);
+                    }
+                    if (result=="RELICA")
                     {
                         string NameDate = dateTraitement.ToString("yyyyMMdd");
                         string Date = dateTraitement.ToString("dd/MM/yyyy HH:mm:ss");
