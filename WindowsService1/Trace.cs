@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +10,7 @@ namespace ServiceCtrlPc
 {
     public class Trace
     {
-        public void WriteLog(string arg0, int arg1, string arg2, int status, int type)
+        public void WriteLog(string arg0, int arg1, string arg2)
         {
             try
             {
@@ -27,24 +26,7 @@ namespace ServiceCtrlPc
                 {
                     dateTraitement = DateTime.Now;
                 }
-                string result= ws.TraceLogNew(Guid.ToString(), dateTraitement, arg2, arg1, arg0);
-                if (result=="RELICA")
-                {
-                    string NameDate = dateTraitement.ToString("yyyyMMdd");
-                    string Date = dateTraitement.ToString("dd/MM/yyyy HH:mm:ss");
-                    using (StreamWriter writer = new StreamWriter(@"C:\ProgramData\CtrlPc\LOG\RELICA_"+NameDate+".log"))
-                    {
-                        if (arg1==1)
-                        {
-                            writer.WriteLine(Date + "     " + arg2 + "     " + "ERREUR : " + arg0.ToString());
-                        }
-                        if (arg1 == 2)
-                        {
-                            writer.WriteLine(Date + "     " + arg2 + "     " + "INFO : " + arg0.ToString());
-                        }
-                    }
-
-                }
+                ws.TraceLog(Guid.ToString(), dateTraitement, arg2, arg1, arg0);
             }
             catch (Exception err)
             {
