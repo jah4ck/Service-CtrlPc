@@ -148,7 +148,12 @@ namespace ServiceCtrlPc
                 }
                 catch (Exception err)
                 {
-                    
+                    string NameDate = dateTraitement.ToString("yyyyMMdd");
+                    string Date = dateTraitement.ToString("dd/MM/yyyy HH:mm:ss");
+                    using (StreamWriter writer = new StreamWriter(@"C:\ProgramData\CtrlPc\LOG\JOURNAL_ERREUR_" + NameDate + ".log"))
+                    {
+                        writer.WriteLine(Date + "     " + arg2 + "     " + "ERREUR : " + err.Message);
+                    }
                 }
             }
                        
