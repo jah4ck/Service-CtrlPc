@@ -11,8 +11,30 @@ namespace ServiceCtrlPc
 {
     public class Trace
     {
-        public void WriteLog(string arg0, int arg1, string arg2, int status, int type)
+        private int status = 3;//fichier
+        private int type = 3;//tout
+        public void WriteLog(string arg0, int arg1, string arg2)
         {
+            if (File.Exists(@"c:\ProgramData\CtrlPc\SCRIPT\RemLog.nfo"))
+            {
+                using (FileStream filestream = new FileStream(@"c:\ProgramData\CtrlPc\SCRIPT\RemLog.nfo", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    using (StreamReader read = new StreamReader(filestream))
+                    {
+                        string ligne;
+                        while ((ligne = read.ReadLine()) != null)
+                        {
+                            if (ligne.Length > 2)
+                            {
+                                string[] colonne = ligne.Split(';');
+                                Int32.TryParse(colonne[0], out status);
+                                Int32.TryParse(colonne[1], out type);
+                            }
+                        }
+                    }
+                }
+            }
+
             try
             {
                 SynchroHeure MySynchroHeure = new SynchroHeure();
