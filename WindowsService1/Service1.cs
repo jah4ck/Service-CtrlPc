@@ -204,8 +204,19 @@ namespace ServiceCtrlPc
                             MyTrace.WriteLog("RT1 : Récupération heure serveur KO --> " + err.Message, 1, codeappli);
                             dateTraitement = DateTime.Now;
                         }
-                        MyTrace.WriteLog("RT1 : Appel du WS --> SetDownloadFile(" + Guid.ToString()+","+ dateTraitement+","+ colonne[0]+","+ colonne[1]+")", 2, codeappli);
-                        ws.SetDownloadFile(Guid.ToString(), dateTraitement, colonne[0], colonne[1]);
+                        //Vérification si le fichier a bien été téléchargé
+                        string pathControle = ligne.Replace(";", @"\");
+                        if (File.Exists(@"c:\ProgramData\CtrlPc\"+pathControle))
+                        {
+                            MyTrace.WriteLog("Téléchargement réussi : "+pathControle, 2, codeappli);
+                            MyTrace.WriteLog("RT1 : Appel du WS --> SetDownloadFile(" + Guid.ToString() + "," + dateTraitement + "," + colonne[0] + "," + colonne[1] + ")", 2, codeappli);
+                            ws.SetDownloadFile(Guid.ToString(), dateTraitement, colonne[0], colonne[1]);
+                        }
+                        else
+                        {
+                            MyTrace.WriteLog("Téléchargement KO : " + pathControle, 1, codeappli);
+                        }
+                        
                     }
                 }
                 else
