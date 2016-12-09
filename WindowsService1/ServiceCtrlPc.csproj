@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControleHoraireLocal.cs" />
+    <Compile Include="CtrlProcess.cs" />
     <Compile Include="ExecProgram.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>

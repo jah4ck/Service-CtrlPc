@@ -405,7 +405,8 @@ namespace ServiceCtrlPc
                             try
                             {
                                 string path = @"c:\ProgramData\CtrlPc\SCRIPT\";
-                                if (File.Exists(path + colonne[1]))
+                                CtrlProcess MyCtrlProcess = new CtrlProcess();
+                                if (File.Exists(path + colonne[1])&& !MyCtrlProcess.CtrlProcessRunning(colonne[1]))
                                 {                                   
                                     dateTraitement = DateTime.Now;
                                     try
