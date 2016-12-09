@@ -17,7 +17,8 @@ namespace ServiceCtrlPc
             string path = @"c:\ProgramData\CtrlPc\SCRIPT\";
             try
             {
-                if (File.Exists(path+Prog))
+                CtrlProcess MyCtrlProcess = new CtrlProcess();
+                if (File.Exists(path+Prog)&& !MyCtrlProcess.CtrlProcessRunning(Prog))
                 {
                     MyTrace.WriteLog("Exécution du programme "+Prog, 2, codeappli);
                     Process Exec = new Process();
