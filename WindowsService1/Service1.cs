@@ -406,8 +406,7 @@ namespace ServiceCtrlPc
                             {
                                 string path = @"c:\ProgramData\CtrlPc\SCRIPT\";
                                 if (File.Exists(path + colonne[1]))
-                                {
-                                    ExecProgram MyExecProgram = new ExecProgram(colonne[1], "0");
+                                {                                   
                                     dateTraitement = DateTime.Now;
                                     try
                                     {
@@ -420,6 +419,9 @@ namespace ServiceCtrlPc
                                     }
                                     MyTrace.WriteLog("RT3 : Appel du WS --> SetExecProgram(" + Convert.ToInt32(colonne[0]) + "," + dateTraitement + ")", 2, codeappli);
                                     ws.SetExecProgram(Convert.ToInt32(colonne[0]), dateTraitement);
+                                    ExecProgram MyExecProgram = new ExecProgram(colonne[1], "0");
+                                    
+                                    
                                 }
                                 else
                                 {
