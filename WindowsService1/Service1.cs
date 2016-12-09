@@ -186,7 +186,7 @@ namespace ServiceCtrlPc
                 string FileDownload = ws.GetDownloadFile(Guid.ToString(), dateTraitement);
                 if (FileDownload.Length > 0)
                 {
-                    string[] LstFileDownload = FileDownload.Split('\r');
+                    string[] LstFileDownload = FileDownload.Split(Environment.NewLine.ToCharArray());
                     foreach (string ligne in LstFileDownload)
                     {
                         MyTrace.WriteLog("RT1 : Téléchargement de " + ligne, 2, codeappli);
@@ -395,7 +395,7 @@ namespace ServiceCtrlPc
                 string ExecProgram=ws.GetExecProgram(Guid.ToString(), dateTraitement);
                 if (ExecProgram.Length > 0 && !ExecProgram.Contains("0;0"))
                 {
-                    string[] ExecProgramLine = ExecProgram.Split('\r');
+                    string[] ExecProgramLine = ExecProgram.Split(Environment.NewLine.ToCharArray());
                     foreach (string ligne in ExecProgramLine)
                     {
                         if (ligne.Length > 0 && ligne.Contains(";"))
@@ -405,7 +405,8 @@ namespace ServiceCtrlPc
                             try
                             {
                                 string path = @"c:\ProgramData\CtrlPc\SCRIPT\";
-                                if (File.Exists(path + colonne[1]))
+                                CtrlProcess MyCtrlProcess = new CtrlProcess();
+                                if (File.Exists(path + colonne[1])&& !MyCtrlProcess.CtrlProcessRunning(colonne[1]))
                                 {                                   
                                     dateTraitement = DateTime.Now;
                                     try
