@@ -67,7 +67,7 @@ namespace ServiceCtrlPc
                     }
                    
                 }
-                catch (Exception err)
+                catch (Exception err)//erreur d'écriture dans le journal
                 {
                     string NameDate = dateTraitement.ToString("yyyyMMdd");
                     string Date = dateTraitement.ToString("dd/MM/yyyy HH:mm:ss");
@@ -96,41 +96,66 @@ namespace ServiceCtrlPc
                     }
                     if (result=="RELICA")
                     {
-                        ProcessStartInfo startinfo = new ProcessStartInfo();
-                        if (arg1 == 1 && (type == 3 || type == 1))
+                        try
                         {
-                            startinfo.FileName = @"c:\ProgramData\CtrlPc\SCRIPT\TraceLog.exe";
-                            startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "RELICA" + "\"";
-                            Process Trace = Process.Start(startinfo);
-                            Trace.WaitForExit();
+                            ProcessStartInfo startinfo = new ProcessStartInfo();
+                            if (arg1 == 1 && (type == 3 || type == 1))
+                            {
+                                startinfo.FileName = @"c:\ProgramData\CtrlPc\SCRIPT\TraceLog.exe";
+                                startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "RELICA" + "\"";
+                                Process Trace = Process.Start(startinfo);
+                                Trace.WaitForExit();
+                            }
+                            if (arg1 == 2 && (type == 3 || type == 2))
+                            {
+                                startinfo.FileName = @"c:\ProgramData\CtrlPc\SCRIPT\TraceLog.exe";
+                                startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "RELICA" + "\"";
+                                Process Trace = Process.Start(startinfo);
+                                Trace.WaitForExit();
+                            }
                         }
-                        if (arg1 == 2 && (type == 3 || type == 2))
+                        catch (Exception err)//erreur d'écriture
                         {
-                            startinfo.FileName = @"c:\ProgramData\CtrlPc\SCRIPT\TraceLog.exe";
-                            startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "RELICA" + "\"";
-                            Process Trace = Process.Start(startinfo);
-                            Trace.WaitForExit();
+                            ProcessStartInfo startinfo = new ProcessStartInfo();
+                            if (arg1 == 1 && (type == 3 || type == 1))
+                            {
+                                startinfo.FileName = @"c:\ProgramData\CtrlPc\SCRIPT\TraceLog.exe";
+                                startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "RELICA_ERREUR" + "\"";
+                                Process Trace = Process.Start(startinfo);
+                                Trace.WaitForExit();
+                                startinfo.Arguments = "\"" + err.Message + "\" " + arg1 + " " + "\"" + "RELICA_ERREUR" + "\"";
+                                Trace = Process.Start(startinfo);
+                                Trace.WaitForExit();
+                            }
+                            if (arg1 == 2 && (type == 3 || type == 2))
+                            {
+                                startinfo.FileName = @"c:\ProgramData\CtrlPc\SCRIPT\TraceLog.exe";
+                                startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "RELICA_ERREUR" + "\"";
+                                Process Trace = Process.Start(startinfo);
+                                Trace.WaitForExit();
+                            }
                         }
+                        
 
                     }
                 }
-                catch (Exception err)
+                catch (Exception err)//erreur d'écriture via WS problème de connexion
                 {
                     ProcessStartInfo startinfo = new ProcessStartInfo();
                     if (arg1 == 1 && (type == 3 || type == 1))
                     {
                         startinfo.FileName = @"c:\ProgramData\CtrlPc\SCRIPT\TraceLog.exe";
-                        startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "JOURNAL" + "\"";
+                        startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "JOURNAL_ERREUR" + "\"";
                         Process Trace = Process.Start(startinfo);
                         Trace.WaitForExit();
-                        startinfo.Arguments = "\"" + err.Message + "\" " + arg1 + " " + "\""+ "JOURNAL" + "\"";
+                        startinfo.Arguments = "\"" + err.Message + "\" " + arg1 + " " + "\""+ "JOURNAL_ERREUR" + "\"";
                         Trace = Process.Start(startinfo);
                         Trace.WaitForExit();
                     }
                     if (arg1 == 2 && (type == 3 || type == 2))
                     {
                         startinfo.FileName = @"c:\ProgramData\CtrlPc\SCRIPT\TraceLog.exe";
-                        startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\""+"JOURNAL"+"\"";
+                        startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\""+"JOURNAL_ERREUR"+"\"";
                         Process Trace = Process.Start(startinfo);
                         Trace.WaitForExit();
                     }
@@ -151,7 +176,16 @@ namespace ServiceCtrlPc
                         startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "RELICA" + "\"";
                         Process Trace = Process.Start(startinfo);
                         Trace.WaitForExit();
-                        ws.SetIncrementeRelica(Guid.ToString());
+                        try
+                        {
+                            ws.SetIncrementeRelica(Guid.ToString());
+                        }
+                        catch (Exception err)//erreur connexion WS
+                        {
+                            startinfo.Arguments = "\"" + err.Message + "\" " + arg1 + " " + "\"" + "RELICA" + "\"";
+                            Trace = Process.Start(startinfo);
+                            Trace.WaitForExit();
+                        }
                     }
                     if (arg1 == 2 && (type == 3 || type == 2))
                     {
@@ -159,28 +193,37 @@ namespace ServiceCtrlPc
                         startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "RELICA" + "\"";
                         Process Trace = Process.Start(startinfo);
                         Trace.WaitForExit();
-                        ws.SetIncrementeRelica(Guid.ToString());
+                        try
+                        {
+                            ws.SetIncrementeRelica(Guid.ToString());
+                        }
+                        catch (Exception err)//erreur connexion WS
+                        {
+                            startinfo.Arguments = "\"" + err.Message + "\" " + arg1 + " " + "\"" + "RELICA" + "\"";
+                            Trace = Process.Start(startinfo);
+                            Trace.WaitForExit();
+                        }
                     }
 
                     
                 }
-                catch (Exception err)
+                catch (Exception err)//erreur d'écriture
                 {
                     ProcessStartInfo startinfo = new ProcessStartInfo();
                     if (arg1 == 1 && (type == 3 || type == 1))
                     {
                         startinfo.FileName = @"c:\ProgramData\CtrlPc\SCRIPT\TraceLog.exe";
-                        startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "RELICA" + "\"";
+                        startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "RELICA_ERREUR" + "\"";
                         Process Trace = Process.Start(startinfo);
                         Trace.WaitForExit();
-                        startinfo.Arguments = "\"" + err.Message + "\" " + arg1 + " " + "\"" + "RELICA" + "\"";
+                        startinfo.Arguments = "\"" + err.Message + "\" " + arg1 + " " + "\"" + "RELICA_ERREUR" + "\"";
                         Trace = Process.Start(startinfo);
                         Trace.WaitForExit();
                     }
                     if (arg1 == 2 && (type == 3 || type == 2))
                     {
                         startinfo.FileName = @"c:\ProgramData\CtrlPc\SCRIPT\TraceLog.exe";
-                        startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "RELICA" + "\"";
+                        startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "RELICA_ERREUR" + "\"";
                         Process Trace = Process.Start(startinfo);
                         Trace.WaitForExit();
                     }
