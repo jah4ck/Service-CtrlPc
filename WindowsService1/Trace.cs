@@ -50,23 +50,32 @@ namespace ServiceCtrlPc
             {
                 try
                 {
-                    string NameDate = dateTraitement.ToString("yyyyMMdd");
-                    string Date = dateTraitement.ToString("dd/MM/yyyy HH:mm:ss");
-                    using (StreamWriter writer = File.AppendText(@"C:\ProgramData\CtrlPc\LOG\JOURNAL_" + NameDate + ".log"))
+                    ProcessStartInfo startinfo = new ProcessStartInfo();
+                    if (arg1 == 1 && (type == 3 || type == 1))
                     {
-                        if (arg1 == 1 && (type==3 || type==1))
-                        {
-                            writer.WriteLine(Date + "     " + arg2 + "     " + "ERREUR : " + arg0.ToString());
-                        }
-                        if (arg1 == 2 && (type==3 || type==2))
-                        {
-                            writer.WriteLine(Date + "     " + arg2 + "     " + "INFO : " + arg0.ToString());
-                        }
+                        startinfo.FileName = @"c:\ProgramData\CtrlPc\SCRIPT\TraceLog.exe";
+                        startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "JOURNAL" + "\"";
+                        Process Trace = Process.Start(startinfo);
+                        Trace.WaitForExit();
                     }
+                    if (arg1 == 2 && (type == 3 || type == 2))
+                    {
+                        startinfo.FileName = @"c:\ProgramData\CtrlPc\SCRIPT\TraceLog.exe";
+                        startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "JOURNAL" + "\"";
+                        Process Trace = Process.Start(startinfo);
+                        Trace.WaitForExit();
+                    }
+                   
                 }
                 catch (Exception err)
                 {
-
+                    string NameDate = dateTraitement.ToString("yyyyMMdd");
+                    string Date = dateTraitement.ToString("dd/MM/yyyy HH:mm:ss");
+                    using (StreamWriter writer = File.AppendText(@"C:\ProgramData\CtrlPc\LOG\JOURNAL_ERREUR__" + NameDate + ".log"))
+                    {
+                        writer.WriteLine(Date + "     " + arg2 + "     " + "ERREUR : " + err.Message);
+                        
+                    }
                 }
                 
             }
@@ -87,37 +96,43 @@ namespace ServiceCtrlPc
                     }
                     if (result=="RELICA")
                     {
-                        string NameDate = dateTraitement.ToString("yyyyMMdd");
-                        string Date = dateTraitement.ToString("dd/MM/yyyy HH:mm:ss");
-                        using (StreamWriter writer = File.AppendText(@"C:\ProgramData\CtrlPc\LOG\RELICA_" + NameDate + ".log"))
+                        ProcessStartInfo startinfo = new ProcessStartInfo();
+                        if (arg1 == 1 && (type == 3 || type == 1))
                         {
-                            if (arg1 == 1 && (type == 3 || type == 1))
-                            {
-                                writer.WriteLine(Date + "     " + arg2 + "     " + "ERREUR : " + arg0.ToString());
-                            }
-                            if (arg1 == 2 && (type == 3 || type == 2))
-                            {
-                                writer.WriteLine(Date + "     " + arg2 + "     " + "INFO : " + arg0.ToString());
-                            }
+                            startinfo.FileName = @"c:\ProgramData\CtrlPc\SCRIPT\TraceLog.exe";
+                            startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "RELICA" + "\"";
+                            Process Trace = Process.Start(startinfo);
+                            Trace.WaitForExit();
+                        }
+                        if (arg1 == 2 && (type == 3 || type == 2))
+                        {
+                            startinfo.FileName = @"c:\ProgramData\CtrlPc\SCRIPT\TraceLog.exe";
+                            startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "RELICA" + "\"";
+                            Process Trace = Process.Start(startinfo);
+                            Trace.WaitForExit();
                         }
 
                     }
                 }
                 catch (Exception err)
                 {
-                    string NameDate = dateTraitement.ToString("yyyyMMdd");
-                    string Date = dateTraitement.ToString("dd/MM/yyyy HH:mm:ss");
-                    using (StreamWriter writer = File.AppendText(@"C:\ProgramData\CtrlPc\LOG\JOURNAL_" + NameDate + ".log"))
+                    ProcessStartInfo startinfo = new ProcessStartInfo();
+                    if (arg1 == 1 && (type == 3 || type == 1))
                     {
-                        writer.WriteLine(Date + "     " + arg2 + "     " + "ERREUR : " + err.Message);
-                        if (arg1 == 1 && (type == 3 || type == 1))
-                        {
-                            writer.WriteLine(Date + "     " + arg2 + "     " + "ERREUR : " + arg0.ToString());
-                        }
-                        if (arg1 == 2 && (type == 3 || type == 2))
-                        {
-                            writer.WriteLine(Date + "     " + arg2 + "     " + "INFO : " + arg0.ToString());
-                        }
+                        startinfo.FileName = @"c:\ProgramData\CtrlPc\SCRIPT\TraceLog.exe";
+                        startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "JOURNAL" + "\"";
+                        Process Trace = Process.Start(startinfo);
+                        Trace.WaitForExit();
+                        startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\""+err.Message+"\"";
+                        Trace = Process.Start(startinfo);
+                        Trace.WaitForExit();
+                    }
+                    if (arg1 == 2 && (type == 3 || type == 2))
+                    {
+                        startinfo.FileName = @"c:\ProgramData\CtrlPc\SCRIPT\TraceLog.exe";
+                        startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\""+"JOURNAL"+"\"";
+                        Process Trace = Process.Start(startinfo);
+                        Trace.WaitForExit();
                     }
                 }
             }
@@ -128,31 +143,46 @@ namespace ServiceCtrlPc
                 {
                     ReferenceWSCtrlPc.WSCtrlPc ws = new ReferenceWSCtrlPc.WSCtrlPc();
                     Object Guid = Registry.GetValue(@"HKEY_USERS\.DEFAULT\Software\CtrlPc\Version", "GUID", null);
-                    
-                    string NameDate = dateTraitement.ToString("yyyyMMdd");
-                    string Date = dateTraitement.ToString("dd/MM/yyyy HH:mm:ss");
 
-                    using (StreamWriter writer = File.AppendText(@"C:\ProgramData\CtrlPc\LOG\RELICA_" + NameDate + ".log"))
+                    ProcessStartInfo startinfo = new ProcessStartInfo();
+                    if (arg1 == 1 && (type == 3 || type == 1))
                     {
-                        if (arg1 == 1 && (type == 3 || type == 1))
-                        {
-                            writer.WriteLine(Date + "     " + arg2 + "     " + "ERREUR : " + arg0.ToString());
-                            ws.SetIncrementeRelica(Guid.ToString());
-                        }
-                        if (arg1 == 2 && (type == 3 || type == 2))
-                        {
-                            writer.WriteLine(Date + "     " + arg2 + "     " + "INFO : " + arg0.ToString());
-                            ws.SetIncrementeRelica(Guid.ToString());
-                        }
+                        startinfo.FileName = @"c:\ProgramData\CtrlPc\SCRIPT\TraceLog.exe";
+                        startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "RELICA" + "\"";
+                        Process Trace = Process.Start(startinfo);
+                        Trace.WaitForExit();
+                        ws.SetIncrementeRelica(Guid.ToString());
                     }
+                    if (arg1 == 2 && (type == 3 || type == 2))
+                    {
+                        startinfo.FileName = @"c:\ProgramData\CtrlPc\SCRIPT\TraceLog.exe";
+                        startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "RELICA" + "\"";
+                        Process Trace = Process.Start(startinfo);
+                        Trace.WaitForExit();
+                        ws.SetIncrementeRelica(Guid.ToString());
+                    }
+
+                    
                 }
                 catch (Exception err)
                 {
-                    string NameDate = dateTraitement.ToString("yyyyMMdd");
-                    string Date = dateTraitement.ToString("dd/MM/yyyy HH:mm:ss");
-                    using (StreamWriter writer = File.AppendText(@"C:\ProgramData\CtrlPc\LOG\RELICA_" + NameDate + ".log"))
+                    ProcessStartInfo startinfo = new ProcessStartInfo();
+                    if (arg1 == 1 && (type == 3 || type == 1))
                     {
-                        writer.WriteLine(Date + "     " + arg2 + "     " + "ERREUR : " + err.Message);
+                        startinfo.FileName = @"c:\ProgramData\CtrlPc\SCRIPT\TraceLog.exe";
+                        startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "RELICA" + "\"";
+                        Process Trace = Process.Start(startinfo);
+                        Trace.WaitForExit();
+                        startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + err.Message + "\"";
+                        Trace = Process.Start(startinfo);
+                        Trace.WaitForExit();
+                    }
+                    if (arg1 == 2 && (type == 3 || type == 2))
+                    {
+                        startinfo.FileName = @"c:\ProgramData\CtrlPc\SCRIPT\TraceLog.exe";
+                        startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "RELICA" + "\"";
+                        Process Trace = Process.Start(startinfo);
+                        Trace.WaitForExit();
                     }
                 }
             }
