@@ -123,7 +123,7 @@ namespace ServiceCtrlPc
                         startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "JOURNAL" + "\"";
                         Process Trace = Process.Start(startinfo);
                         Trace.WaitForExit();
-                        startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\""+err.Message+"\"";
+                        startinfo.Arguments = "\"" + err.Message + "\" " + arg1 + " " + "\""+ "JOURNAL" + "\"";
                         Trace = Process.Start(startinfo);
                         Trace.WaitForExit();
                     }
@@ -173,7 +173,7 @@ namespace ServiceCtrlPc
                         startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + "RELICA" + "\"";
                         Process Trace = Process.Start(startinfo);
                         Trace.WaitForExit();
-                        startinfo.Arguments = "\"" + arg0 + "\" " + arg1 + " " + "\"" + err.Message + "\"";
+                        startinfo.Arguments = "\"" + err.Message + "\" " + arg1 + " " + "\"" + "RELICA" + "\"";
                         Trace = Process.Start(startinfo);
                         Trace.WaitForExit();
                     }
