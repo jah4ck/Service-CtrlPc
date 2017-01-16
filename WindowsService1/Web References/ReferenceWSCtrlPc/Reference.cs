@@ -35,6 +35,8 @@ namespace ServiceCtrlPc.ReferenceWSCtrlPc {
         
         private System.Threading.SendOrPostCallback TraceLogOperationCompleted;
         
+        private System.Threading.SendOrPostCallback TraceLogNewOperationCompleted;
+        
         private System.Threading.SendOrPostCallback GetPlanningOperationCompleted;
         
         private System.Threading.SendOrPostCallback GetArretOperationCompleted;
@@ -52,6 +54,8 @@ namespace ServiceCtrlPc.ReferenceWSCtrlPc {
         private System.Threading.SendOrPostCallback GetExceptionOperationCompleted;
         
         private System.Threading.SendOrPostCallback SetDateDerniereConnexionOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback SetIncrementeRelicaOperationCompleted;
         
         private bool useDefaultCredentialsSetExplicitly;
         
@@ -101,6 +105,9 @@ namespace ServiceCtrlPc.ReferenceWSCtrlPc {
         public event TraceLogCompletedEventHandler TraceLogCompleted;
         
         /// <remarks/>
+        public event TraceLogNewCompletedEventHandler TraceLogNewCompleted;
+        
+        /// <remarks/>
         public event GetPlanningCompletedEventHandler GetPlanningCompleted;
         
         /// <remarks/>
@@ -126,6 +133,9 @@ namespace ServiceCtrlPc.ReferenceWSCtrlPc {
         
         /// <remarks/>
         public event SetDateDerniereConnexionCompletedEventHandler SetDateDerniereConnexionCompleted;
+        
+        /// <remarks/>
+        public event SetIncrementeRelicaCompletedEventHandler SetIncrementeRelicaCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/HelloWorld", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -221,6 +231,43 @@ namespace ServiceCtrlPc.ReferenceWSCtrlPc {
             if ((this.TraceLogCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.TraceLogCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/TraceLogNew", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public string TraceLogNew(string guid, System.DateTime dateTraitement, string codeappli, int codeerreur, string description) {
+            object[] results = this.Invoke("TraceLogNew", new object[] {
+                        guid,
+                        dateTraitement,
+                        codeappli,
+                        codeerreur,
+                        description});
+            return ((string)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void TraceLogNewAsync(string guid, System.DateTime dateTraitement, string codeappli, int codeerreur, string description) {
+            this.TraceLogNewAsync(guid, dateTraitement, codeappli, codeerreur, description, null);
+        }
+        
+        /// <remarks/>
+        public void TraceLogNewAsync(string guid, System.DateTime dateTraitement, string codeappli, int codeerreur, string description, object userState) {
+            if ((this.TraceLogNewOperationCompleted == null)) {
+                this.TraceLogNewOperationCompleted = new System.Threading.SendOrPostCallback(this.OnTraceLogNewOperationCompleted);
+            }
+            this.InvokeAsync("TraceLogNew", new object[] {
+                        guid,
+                        dateTraitement,
+                        codeappli,
+                        codeerreur,
+                        description}, this.TraceLogNewOperationCompleted, userState);
+        }
+        
+        private void OnTraceLogNewOperationCompleted(object arg) {
+            if ((this.TraceLogNewCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.TraceLogNewCompleted(this, new TraceLogNewCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -497,6 +544,34 @@ namespace ServiceCtrlPc.ReferenceWSCtrlPc {
         }
         
         /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/SetIncrementeRelica", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SetIncrementeRelica(string guid) {
+            this.Invoke("SetIncrementeRelica", new object[] {
+                        guid});
+        }
+        
+        /// <remarks/>
+        public void SetIncrementeRelicaAsync(string guid) {
+            this.SetIncrementeRelicaAsync(guid, null);
+        }
+        
+        /// <remarks/>
+        public void SetIncrementeRelicaAsync(string guid, object userState) {
+            if ((this.SetIncrementeRelicaOperationCompleted == null)) {
+                this.SetIncrementeRelicaOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSetIncrementeRelicaOperationCompleted);
+            }
+            this.InvokeAsync("SetIncrementeRelica", new object[] {
+                        guid}, this.SetIncrementeRelicaOperationCompleted, userState);
+        }
+        
+        private void OnSetIncrementeRelicaOperationCompleted(object arg) {
+            if ((this.SetIncrementeRelicaCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SetIncrementeRelicaCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
         public new void CancelAsync(object userState) {
             base.CancelAsync(userState);
         }
@@ -548,6 +623,32 @@ namespace ServiceCtrlPc.ReferenceWSCtrlPc {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
     public delegate void TraceLogCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
+    public delegate void TraceLogNewCompletedEventHandler(object sender, TraceLogNewCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class TraceLogNewCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal TraceLogNewCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public string Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
+    }
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
@@ -716,6 +817,10 @@ namespace ServiceCtrlPc.ReferenceWSCtrlPc {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
     public delegate void SetDateDerniereConnexionCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
+    public delegate void SetIncrementeRelicaCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
 }
 
 #pragma warning restore 1591

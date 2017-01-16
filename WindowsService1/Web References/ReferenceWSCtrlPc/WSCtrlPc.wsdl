@@ -39,6 +39,24 @@
       <s:element name="TraceLogResponse">
         <s:complexType />
       </s:element>
+      <s:element name="TraceLogNew">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="guid" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="dateTraitement" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="codeappli" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="codeerreur" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TraceLogNewResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="TraceLogNewResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
       <s:element name="GetPlanning">
         <s:complexType>
           <s:sequence>
@@ -160,6 +178,16 @@
       <s:element name="SetDateDerniereConnexionResponse">
         <s:complexType />
       </s:element>
+      <s:element name="SetIncrementeRelica">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="guid" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetIncrementeRelicaResponse">
+        <s:complexType />
+      </s:element>
     </s:schema>
   </wsdl:types>
   <wsdl:message name="HelloWorldSoapIn">
@@ -179,6 +207,12 @@
   </wsdl:message>
   <wsdl:message name="TraceLogSoapOut">
     <wsdl:part name="parameters" element="tns:TraceLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="TraceLogNewSoapIn">
+    <wsdl:part name="parameters" element="tns:TraceLogNew" />
+  </wsdl:message>
+  <wsdl:message name="TraceLogNewSoapOut">
+    <wsdl:part name="parameters" element="tns:TraceLogNewResponse" />
   </wsdl:message>
   <wsdl:message name="GetPlanningSoapIn">
     <wsdl:part name="parameters" element="tns:GetPlanning" />
@@ -234,6 +268,12 @@
   <wsdl:message name="SetDateDerniereConnexionSoapOut">
     <wsdl:part name="parameters" element="tns:SetDateDerniereConnexionResponse" />
   </wsdl:message>
+  <wsdl:message name="SetIncrementeRelicaSoapIn">
+    <wsdl:part name="parameters" element="tns:SetIncrementeRelica" />
+  </wsdl:message>
+  <wsdl:message name="SetIncrementeRelicaSoapOut">
+    <wsdl:part name="parameters" element="tns:SetIncrementeRelicaResponse" />
+  </wsdl:message>
   <wsdl:portType name="WSCtrlPcSoap">
     <wsdl:operation name="HelloWorld">
       <wsdl:input message="tns:HelloWorldSoapIn" />
@@ -246,6 +286,10 @@
     <wsdl:operation name="TraceLog">
       <wsdl:input message="tns:TraceLogSoapIn" />
       <wsdl:output message="tns:TraceLogSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TraceLogNew">
+      <wsdl:input message="tns:TraceLogNewSoapIn" />
+      <wsdl:output message="tns:TraceLogNewSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="GetPlanning">
       <wsdl:input message="tns:GetPlanningSoapIn" />
@@ -283,6 +327,10 @@
       <wsdl:input message="tns:SetDateDerniereConnexionSoapIn" />
       <wsdl:output message="tns:SetDateDerniereConnexionSoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="SetIncrementeRelica">
+      <wsdl:input message="tns:SetIncrementeRelicaSoapIn" />
+      <wsdl:output message="tns:SetIncrementeRelicaSoapOut" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="WSCtrlPcSoap" type="tns:WSCtrlPcSoap">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
@@ -306,6 +354,15 @@
     </wsdl:operation>
     <wsdl:operation name="TraceLog">
       <soap:operation soapAction="http://tempuri.org/TraceLog" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TraceLogNew">
+      <soap:operation soapAction="http://tempuri.org/TraceLogNew" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -394,6 +451,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SetIncrementeRelica">
+      <soap:operation soapAction="http://tempuri.org/SetIncrementeRelica" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="WSCtrlPcSoap12" type="tns:WSCtrlPcSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
@@ -417,6 +483,15 @@
     </wsdl:operation>
     <wsdl:operation name="TraceLog">
       <soap12:operation soapAction="http://tempuri.org/TraceLog" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TraceLogNew">
+      <soap12:operation soapAction="http://tempuri.org/TraceLogNew" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -498,6 +573,15 @@
     </wsdl:operation>
     <wsdl:operation name="SetDateDerniereConnexion">
       <soap12:operation soapAction="http://tempuri.org/SetDateDerniereConnexion" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetIncrementeRelica">
+      <soap12:operation soapAction="http://tempuri.org/SetIncrementeRelica" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

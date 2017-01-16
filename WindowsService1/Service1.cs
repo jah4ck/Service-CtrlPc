@@ -53,6 +53,7 @@ namespace ServiceCtrlPc
         }
         Trace MyTrace = new Trace();
         private string codeappli = "SERVICES";
+        
          
         protected override void OnStart(string[] args)
         {
@@ -85,7 +86,9 @@ namespace ServiceCtrlPc
 
             EventLog.WriteEntry("Ecriture journal.log");
             try
-            {            
+            {
+                
+                      
                 MyTrace.WriteLog("START : Démarage du service ServiceCtrlPc", 2, codeappli);                
                 string path = @"c:\ProgramData\CtrlPc\";                
                 MyTrace.WriteLog("START : Récupération de fichiers à télécharger", 2, codeappli);
@@ -183,26 +186,44 @@ namespace ServiceCtrlPc
                 string FileDownload = ws.GetDownloadFile(Guid.ToString(), dateTraitement);
                 if (FileDownload.Length > 0)
                 {
-                    string[] LstFileDownload = FileDownload.Split('\r');
+                    string[] LstFileDownload = FileDownload.Split(Environment.NewLine.ToCharArray());
                     foreach (string ligne in LstFileDownload)
                     {
-                        MyTrace.WriteLog("RT1 : Téléchargement de " + ligne, 2, codeappli);
+                        
                         string argument = ligne.Replace(";", " ");
-                        ExecProgram MyExecProgram = new ExecProgram("DownloadFile.exe", argument);
-                        MyTrace.WriteLog("RT1 : Téléchargement terminé de " + ligne, 2, codeappli);
-                        //mise a jour de la bdd via ws
-                        string[] colonne = ligne.Split(new Char[] { ';' });
-                        try
+                        if (argument.Length>3)
                         {
-                            dateTraitement = MySynchroHeure.GetNetworkTime();
+                            MyTrace.WriteLog("RT1 : Téléchargement de " + ligne, 2, codeappli);
+                            ExecProgram MyExecProgram = new ExecProgram("DownloadFile.exe", argument);
+                            MyTrace.WriteLog("RT1 : Téléchargement terminé de " + ligne, 2, codeappli);
+                            //mise a jour de la bdd via ws
+                            string[] colonne = ligne.Split(new Char[] { ';' });
+                            try
+                            {
+                                dateTraitement = MySynchroHeure.GetNetworkTime();
+                            }
+                            catch (Exception err)
+                            {
+                                MyTrace.WriteLog("RT1 : Récupération heure serveur KO --> " + err.Message, 1, codeappli);
+                                dateTraitement = DateTime.Now;
+                            }
+                            //Vérification si le fichier a bien été téléchargé
+                            //string pathControle = ligne.Replace(";", @"\");
+                            if (File.Exists(@"c:\ProgramData\CtrlPc\" + colonne[0]+@"\"+colonne[1]))
+                            {
+                                MyTrace.WriteLog("Téléchargement réussi : " + colonne[0] + @"\" + colonne[1], 2, codeappli);
+                                MyTrace.WriteLog("RT1 : Appel du WS --> SetDownloadFile(" + Guid.ToString() + "," + dateTraitement + "," + colonne[0] + "," + colonne[1] + ")", 2, codeappli);
+                                ws.SetDownloadFile(Guid.ToString(), dateTraitement, colonne[0], colonne[1]);
+                            }
+                            else
+                            {
+                                MyTrace.WriteLog("Téléchargement KO : " + colonne[0] + @"\" + colonne[1], 1, codeappli);
+                            }
                         }
-                        catch (Exception err)
+                        else
                         {
-                            MyTrace.WriteLog("RT1 : Récupération heure serveur KO --> " + err.Message, 1, codeappli);
-                            dateTraitement = DateTime.Now;
+                            MyTrace.WriteLog("RT1 : Aucun fichier à télécharger ", 2, codeappli);
                         }
-                        MyTrace.WriteLog("RT1 : Appel du WS --> SetDownloadFile(" + Guid.ToString()+","+ dateTraitement+","+ colonne[0]+","+ colonne[1]+")", 2, codeappli);
-                        ws.SetDownloadFile(Guid.ToString(), dateTraitement, colonne[0], colonne[1]);
                     }
                 }
                 else
@@ -213,6 +234,7 @@ namespace ServiceCtrlPc
             catch (Exception err)
             {
                 MyTrace.WriteLog("RT1 : Erreur lors du téléchargement --> " + err.Message, 1, codeappli);
+                MyTrace.WriteLog("RT1 : Erreur lors du téléchargement détail--> " + err.StackTrace, 1, codeappli);
             }
             
             MyTrace.WriteLog("Fin routine 1", 2, codeappli);
@@ -381,7 +403,7 @@ namespace ServiceCtrlPc
                 string ExecProgram=ws.GetExecProgram(Guid.ToString(), dateTraitement);
                 if (ExecProgram.Length > 0 && !ExecProgram.Contains("0;0"))
                 {
-                    string[] ExecProgramLine = ExecProgram.Split('\r');
+                    string[] ExecProgramLine = ExecProgram.Split(Environment.NewLine.ToCharArray());
                     foreach (string ligne in ExecProgramLine)
                     {
                         if (ligne.Length > 0 && ligne.Contains(";"))
@@ -391,9 +413,9 @@ namespace ServiceCtrlPc
                             try
                             {
                                 string path = @"c:\ProgramData\CtrlPc\SCRIPT\";
-                                if (File.Exists(path + colonne[1]))
-                                {
-                                    ExecProgram MyExecProgram = new ExecProgram(colonne[1], "0");
+                                CtrlProcess MyCtrlProcess = new CtrlProcess();
+                                if (File.Exists(path + colonne[1])&& !MyCtrlProcess.CtrlProcessRunning(colonne[1]))
+                                {                                   
                                     dateTraitement = DateTime.Now;
                                     try
                                     {
@@ -406,6 +428,9 @@ namespace ServiceCtrlPc
                                     }
                                     MyTrace.WriteLog("RT3 : Appel du WS --> SetExecProgram(" + Convert.ToInt32(colonne[0]) + "," + dateTraitement + ")", 2, codeappli);
                                     ws.SetExecProgram(Convert.ToInt32(colonne[0]), dateTraitement);
+                                    ExecProgram MyExecProgram = new ExecProgram(colonne[1], "0");
+                                    
+                                    
                                 }
                                 else
                                 {
@@ -417,10 +442,7 @@ namespace ServiceCtrlPc
                                 MyTrace.WriteLog("RT3 : " + err.Message, 1, codeappli);
                             }
                         }
-                        else
-                        {
-                            MyTrace.WriteLog("RT3 : la ligne suivante ne peut pas être parsée : "+ligne, 1, codeappli);
-                        }
+                        
                     }
                 }
                 else
