@@ -53,10 +53,12 @@ namespace ServiceCtrlPc
         }
         Trace MyTrace = new Trace();
         private string codeappli = "SERVICES";
-       
-        //private System.Timers.Timer TMroutine1= new System.Timers.Timer();
-        //private System.Timers.Timer TMroutine2= new System.Timers.Timer();
-        //private System.Timers.Timer TMroutine3= new System.Timers.Timer();
+        private int bcl1 =0;
+        private int bcl2 = 0;
+        private int bcl3 = 0;
+        private System.Timers.Timer TMroutine1= new System.Timers.Timer();
+        private System.Timers.Timer TMroutine2= new System.Timers.Timer();
+        private System.Timers.Timer TMroutine3= new System.Timers.Timer();
 
         protected override void OnStart(string[] args)
         {
@@ -72,19 +74,17 @@ namespace ServiceCtrlPc
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
             // Set up a timer to trigger every minute.
-            System.Timers.Timer TMroutine1 = new System.Timers.Timer();
+            //TMroutine1 = new System.Timers.Timer();
             TMroutine1.Interval = 900000; // 15 min
             TMroutine1.Elapsed += new System.Timers.ElapsedEventHandler(this.Routine1);
             TMroutine1.Start();
 
             //TMroutine2 = new System.Timers.Timer();
-            System.Timers.Timer TMroutine2 = new System.Timers.Timer();
             TMroutine2.Interval = 120000; // 2 min
             TMroutine2.Elapsed += new System.Timers.ElapsedEventHandler(this.Routine2);
             TMroutine2.Start();
 
             //TMroutine3 = new System.Timers.Timer();
-            System.Timers.Timer TMroutine3 = new System.Timers.Timer();
             TMroutine3.Interval = 60000; //  1 min
             TMroutine3.Elapsed += new System.Timers.ElapsedEventHandler(this.Routine3);
             TMroutine3.Start();
@@ -155,8 +155,13 @@ namespace ServiceCtrlPc
 
         public void Routine1(object sender, System.Timers.ElapsedEventArgs args)
         {
-            //TMroutine1.Stop();
-            string id = DateTime.Now.ToString("HHmmss");
+            TMroutine1.Stop();
+            if (bcl1 > 1000)
+            {
+                bcl1 = 0;
+            }
+            bcl1++;
+            int id = bcl1;
             //Exécution des program et création des fichiers de param et téléchargement des maj
             //création fichier param
             MyTrace.WriteLog("RT1 : "+id.ToString()+" : Début routine 1", 2, codeappli);
@@ -245,12 +250,17 @@ namespace ServiceCtrlPc
             }
             
             MyTrace.WriteLog("RT1 : " + id.ToString() + " : Fin routine 1", 2, codeappli);
-            //TMroutine1.Start();
+            TMroutine1.Start();
         }
         public void Routine2(object sender, System.Timers.ElapsedEventArgs args)
         {
-            //TMroutine2.Stop();
-            string id = DateTime.Now.ToString("HHmmss");
+            TMroutine2.Stop();
+            if (bcl2 > 1000)
+            {
+                bcl2 = 0;
+            }
+            bcl2++;
+            int id = bcl2;
             MyTrace.WriteLog("RT2 : " + id.ToString() + " : Début routine 2", 2, codeappli);
             //Maj de la date de dernière connexion
             try
@@ -385,19 +395,19 @@ namespace ServiceCtrlPc
                 }
             }
             MyTrace.WriteLog("RT2 : " + id.ToString() + " : Fin routine 2", 2, codeappli);
-            //TMroutine2.Start();
+            TMroutine2.Start();
 
         }
 
         public void Routine3(object sender, System.Timers.ElapsedEventArgs args)
         {
-            //TMroutine3.Stop();
-            //if (bcl3>1000)
-            //{
-            //    bcl3 =0;
-            //}
-            //bcl3++;
-            string id = DateTime.Now.ToString("HHmmss");
+            TMroutine3.Stop();
+            if (bcl3>1000)
+            {
+                bcl3 =0;
+            }
+            bcl3++;
+            int id = bcl3;
             MyTrace.WriteLog("RT3 : " + id.ToString() + " : Début Routine 3", 2, codeappli);
             SynchroHeure MySynchroHeure = new SynchroHeure();
 
@@ -483,7 +493,7 @@ namespace ServiceCtrlPc
             }
             
             MyTrace.WriteLog("RT3 : " + id.ToString() + " : Fin Routine 3", 2, codeappli);
-            //TMroutine3.Start();
+            TMroutine3.Start();
         }
 
         protected override void OnStop()
