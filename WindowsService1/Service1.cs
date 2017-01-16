@@ -156,6 +156,10 @@ namespace ServiceCtrlPc
         public void Routine1(object sender, System.Timers.ElapsedEventArgs args)
         {
             TMroutine1.Stop();
+            if (bcl1 > 1000)
+            {
+                bcl1 = 0;
+            }
             bcl1++;
             int id = bcl1;
             //Exécution des program et création des fichiers de param et téléchargement des maj
@@ -251,6 +255,10 @@ namespace ServiceCtrlPc
         public void Routine2(object sender, System.Timers.ElapsedEventArgs args)
         {
             TMroutine2.Stop();
+            if (bcl2 > 1000)
+            {
+                bcl2 = 0;
+            }
             bcl2++;
             int id = bcl2;
             MyTrace.WriteLog("RT2 : " + id.ToString() + " : Début routine 2", 2, codeappli);
@@ -394,6 +402,10 @@ namespace ServiceCtrlPc
         public void Routine3(object sender, System.Timers.ElapsedEventArgs args)
         {
             TMroutine3.Stop();
+            if (bcl3>1000)
+            {
+                bcl3 =0;
+            }
             bcl3++;
             int id = bcl3;
             MyTrace.WriteLog("RT3 : " + id.ToString() + " : Début Routine 3", 2, codeappli);
