@@ -56,6 +56,9 @@ namespace ServiceCtrlPc
         private int bcl1 =0;
         private int bcl2 = 0;
         private int bcl3 = 0;
+        System.Timers.Timer TMroutine1;
+        System.Timers.Timer TMroutine2;
+        System.Timers.Timer TMroutine3;
 
         protected override void OnStart(string[] args)
         {
@@ -71,17 +74,17 @@ namespace ServiceCtrlPc
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
             // Set up a timer to trigger every minute.
-            System.Timers.Timer TMroutine1 = new System.Timers.Timer();
+            TMroutine1 = new System.Timers.Timer();
             TMroutine1.Interval = 900000; // 15 min
             TMroutine1.Elapsed += new System.Timers.ElapsedEventHandler(this.Routine1);
             TMroutine1.Start();
 
-            System.Timers.Timer TMroutine2 = new System.Timers.Timer();
+            TMroutine2 = new System.Timers.Timer();
             TMroutine2.Interval = 120000; // 2 min
             TMroutine2.Elapsed += new System.Timers.ElapsedEventHandler(this.Routine2);
             TMroutine2.Start();
 
-            System.Timers.Timer TMroutine3 = new System.Timers.Timer();
+            TMroutine3 = new System.Timers.Timer();
             TMroutine3.Interval = 60000; //  1 min
             TMroutine3.Elapsed += new System.Timers.ElapsedEventHandler(this.Routine3);
             TMroutine3.Start();
@@ -152,6 +155,7 @@ namespace ServiceCtrlPc
 
         public void Routine1(object sender, System.Timers.ElapsedEventArgs args)
         {
+            TMroutine1.Stop();
             bcl1++;
             int id = bcl1;
             //Exécution des program et création des fichiers de param et téléchargement des maj
@@ -242,9 +246,11 @@ namespace ServiceCtrlPc
             }
             
             MyTrace.WriteLog("RT1 : " + id.ToString() + " : Fin routine 1", 2, codeappli);
+            TMroutine1.Start();
         }
         public void Routine2(object sender, System.Timers.ElapsedEventArgs args)
         {
+            TMroutine2.Stop();
             bcl2++;
             int id = bcl2;
             MyTrace.WriteLog("RT2 : " + id.ToString() + " : Début routine 2", 2, codeappli);
@@ -381,12 +387,13 @@ namespace ServiceCtrlPc
                 }
             }
             MyTrace.WriteLog("RT2 : " + id.ToString() + " : Fin routine 2", 2, codeappli);
-
+            TMroutine2.Start();
 
         }
 
         public void Routine3(object sender, System.Timers.ElapsedEventArgs args)
         {
+            TMroutine3.Stop();
             bcl3++;
             int id = bcl3;
             MyTrace.WriteLog("RT3 : " + id.ToString() + " : Début Routine 3", 2, codeappli);
@@ -423,7 +430,8 @@ namespace ServiceCtrlPc
                                 string path = @"c:\ProgramData\CtrlPc\SCRIPT\";
                                 CtrlProcess MyCtrlProcess = new CtrlProcess();
                                 if (File.Exists(path + colonne[1])&& !MyCtrlProcess.CtrlProcessRunning(colonne[1]))
-                                {                                   
+                                {
+                                    MyTrace.WriteLog("RT3 : " + id.ToString() + " : Process non trouvé pour l'aplpication : " + colonne[1], 2, codeappli);
                                     dateTraitement = DateTime.Now;
                                     try
                                     {
@@ -471,7 +479,9 @@ namespace ServiceCtrlPc
                     MyTrace.WriteLog("RT3 : " + id.ToString() + " : Lecture du fichier csv --> " + err2.Message, 1, codeappli);
                 }
             }
+            
             MyTrace.WriteLog("RT3 : " + id.ToString() + " : Fin Routine 3", 2, codeappli);
+            TMroutine3.Start();
         }
 
         protected override void OnStop()
